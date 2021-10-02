@@ -19,6 +19,7 @@ public class BreadthFirstSearch {
         System.out.println(BFS(graph, "Tom", "Clare"));
     }
 
+    // подходит для ориентированного графа без петель
     public static boolean BFS(Map<String, List<String>> map,String first, String x) {
         Deque<String> deque = new LinkedList<>();
         deque.push(first);
