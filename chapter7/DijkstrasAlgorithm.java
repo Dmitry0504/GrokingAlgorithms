@@ -1,23 +1,51 @@
 package chapter7;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DijkstrasAlgorithm {
+    static Map<String, Map<String, Integer>> graph = fillGraph();
+    static Map<String, Integer> costs = getCosts();
+    static Map<String, String> parents = getParents();
+    static List<String> processed = new ArrayList<>();
+
     public static void main(String[] args) {
-        Map<String, Map<String, Integer>> graph = fillGraph();
-        Map<String, Integer> costs = getCosts();
-        Map<String, String> parents = getParents();
 
         System.out.println(parents);
         System.out.println(costs);
         System.out.println(graph);
+
+        System.out.println(findLowestCostNode(costs));
     }
 
     public void algorithm() {
-        
+        String node = findLowestCostNode(costs);
+        int cost = -1;
+
+        while (node != null) {
+            cost = costs.get(node);
+            Map<String, Integer> neighbors = graph.get(node);
+
+            for (String str: neighbors.keySet()) {
+                int new_cost = cost + neighbors.get(str);
+                if (costs.get(str) > new_cost) {
+                    costs.put(str, new_cost);
+                    parents.put(str, node);
+                }
+            }
+        }
+    }
+
+    public static String findLowestCostNode(Map<String, Integer> costs) {
+        String res = "";
+        int min = Integer.MAX_VALUE;
+        for(Map.Entry<String, Integer> entry: costs.entrySet()) {
+            if (entry.getValue() < min) {
+                min = entry.getValue();
+                res = entry.getKey();
+            }
+        }
+
+        return res;
     }
 
     public static Map<String, String> getParents() {
