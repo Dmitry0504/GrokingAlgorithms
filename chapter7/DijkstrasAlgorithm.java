@@ -6,7 +6,7 @@ public class DijkstrasAlgorithm {
     static Map<String, Map<String, Integer>> graph = fillGraph();
     static Map<String, Integer> costs = getCosts();
     static Map<String, String> parents = getParents();
-    static List<String> processed = new ArrayList<>();
+    static Set<String> checkedVertex = new HashSet<>();
 
     public static void main(String[] args) {
 
@@ -14,14 +14,20 @@ public class DijkstrasAlgorithm {
         System.out.println(costs);
         System.out.println(graph);
 
-        System.out.println(findLowestCostNode(costs));
+        System.out.println("----------");
+        algorithm();
+
+        System.out.println(parents);
+        System.out.println(costs);
+        System.out.println(graph);
     }
 
-    public void algorithm() {
+    public static void algorithm() {
         String node = findLowestCostNode(costs);
         int cost = -1;
 
         while (node != null) {
+
             cost = costs.get(node);
             Map<String, Integer> neighbors = graph.get(node);
 
@@ -32,6 +38,9 @@ public class DijkstrasAlgorithm {
                     parents.put(str, node);
                 }
             }
+            checkedVertex.add(node);
+            node = findLowestCostNode(costs);
+            System.out.println(node);
         }
     }
 
@@ -39,7 +48,7 @@ public class DijkstrasAlgorithm {
         String res = "";
         int min = Integer.MAX_VALUE;
         for(Map.Entry<String, Integer> entry: costs.entrySet()) {
-            if (entry.getValue() < min) {
+            if (entry.getValue() < min && !checkedVertex.contains(entry.getKey())) {
                 min = entry.getValue();
                 res = entry.getKey();
             }
